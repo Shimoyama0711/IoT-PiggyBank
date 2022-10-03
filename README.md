@@ -1,9 +1,9 @@
-# IoT-PiggyBank（仮）
+# IoT-PiggyBank
 
-## Dグループメンバー
+## Dグループ `null` メンバー
 - T4-07 梅原
 - T4-24 下山
-- T4-37 平川 
+- T4-34 平川 
 
 ## これはなに？ TL;DR
 インターネット上でも残高を確認できる貯金箱
@@ -35,8 +35,8 @@
     - Wi-Fiを使う場合
         - [ESP-WROOM-02](https://akizukidenshi.com/catalog/g/gK-09758/)
         - [三端子レギュレータ 3.3V500mA](https://akizukidenshi.com/catalog/g/gI-00432/)
-    - LANを使う場合
-        - [Arduino Ethernet Shield2](https://akizukidenshi.com/catalog/g/gM-14380/)
+    - ~~LANを使う場合~~
+        - ~~[Arduino Ethernet Shield2](https://akizukidenshi.com/catalog/g/gM-14380/)~~
 - ~~もしかしたら [Raspberry Pi 4](https://akizukidenshi.com/catalog/g/gM-16834/) を使うかも？~~
 - [LCDディスプレイ](https://akizukidenshi.com/catalog/g/gP-00038/) - SC1602BSLB-XA-GB-K
 - [半固定抵抗(10kΩ)](https://akizukidenshi.com/catalog/g/gP-08012/)
@@ -45,4 +45,9 @@
     - 硬貨検出用、日本の小銭は6種類なので6個分
 - 3Dプリンター
 - [ATMega328P](https://akizukidenshi.com/catalog/g/gI-03142/)
-
+- 抵抗
+  - [220Ω](https://akizukidenshi.com/catalog/g/gR-25221/)
+  - [1kΩ](https://akizukidenshi.com/catalog/g/gR-25102/)
+- コンデンサ
+  - [セラミックコンデンサ 0.1μF](https://akizukidenshi.com/catalog/g/gP-10147/)
+  - [電解コンデンサ 100μF](https://akizukidenshi.com/catalog/g/gP-02724/)
