@@ -1,0 +1,10 @@
+#palette {
+    text-align: center;
+    max-width: 80%;
+}
+
+#palette p {
+    text-align: center;
+    vertical-align: center;
+    filter: invert(100%) contrast(100%);
+}
