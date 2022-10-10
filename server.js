@@ -18,9 +18,7 @@ serve(async (req) => {
     console.log("====================");
      */
 
-    console.log("====================");
     console.log(`${method} ${pathname}`);
-    console.log("====================");
 
     if (pathname === "/rgb") {
         if (method === "GET") {
