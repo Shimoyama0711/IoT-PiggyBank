@@ -1,10 +1,10 @@
 $(function () {
     updateDate();
-    getRGB();
+    updateRGB();
 
     setInterval(updateDate, 100);
 
-    $("#update-rgb").on("click", getRGB);
+    $("#update-rgb").on("click", updateRGB);
     $("#getLocation").on("click", getLocation);
     $("#roll-dice").on("click", rollDice);
 });
@@ -20,7 +20,7 @@ function updateDate() {
 }
 
 // RGBを更新する
-function getRGB() {
+function updateRGB() {
     $.ajax({
         type: "GET",
         url: "/rgb"
@@ -32,6 +32,7 @@ function getRGB() {
         const colorCode = "#" + red + green + blue;
 
         $("#palette").css("background", colorCode);
+        $("#palette-string").text(colorCode);
     });
 }
 
