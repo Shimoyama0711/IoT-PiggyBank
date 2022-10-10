@@ -43,6 +43,6 @@ serve(async (req) => {
         showDirListing: true,
         enableCors: true
     });
-}, { port: 80 }).then(r => {
+}, { port: 443 }).then(r => {
     console.log("then() => " + r);
 });
