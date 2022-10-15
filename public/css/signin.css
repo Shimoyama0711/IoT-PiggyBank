@@ -1,0 +1,20 @@
+html {
+    height: 100%;
+    margin: 0 auto;
+    padding: 0;
+    display: table;
+}
+
+body {
+    background-color: #a3ceda;
+    min-height: 100%;
+    margin: 0 auto;
+    padding: 0;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#main {
+    background-color: white;
+    padding: 30px;
+}
