@@ -1,9 +1,9 @@
 #include <ESP8266.h>
 #include <SoftwareSerial.h>
 
-#define SSID "aterm-81a8df-g"
-#define PASSWORD "1d71de23cfeff"
-#define HOST_NAME "192.168.0.13"
+#define SSID "**********"
+#define PASSWORD "**********"
+#define HOST_NAME "192.168.X.X"
 #define HOST_PORT 80
 
 SoftwareSerial mySerial(12, 11); //RX, TX
