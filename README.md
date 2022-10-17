@@ -41,15 +41,21 @@
 - [LCDディスプレイ](https://akizukidenshi.com/catalog/g/gP-00038/) - SC1602BSLB-XA-GB-K
 - [半固定抵抗(10kΩ)](https://akizukidenshi.com/catalog/g/gP-08012/)
     - LCDのコントラスト調整用
-- [フォトリフレクタ](https://akizukidenshi.com/catalog/g/gP-04500/)
+- [RGB LED](https://akizukidenshi.com/catalog/g/gI-12168/)
+- [CdSセル](https://akizukidenshi.com/catalog/g/gI-00110/)
     - 硬貨検出用、日本の小銭は6種類なので6個分
+- ~~[フォトリフレクタ](https://akizukidenshi.com/catalog/g/gP-04500/)~~
+    - ~~10円玉の検出が上手くいかないので断念~~
 - 3Dプリンター
-- [ATMega328P](https://akizukidenshi.com/catalog/g/gI-03142/)
+- [AVRマイコン - ATMega328P](https://akizukidenshi.com/catalog/g/gI-03142/)
 - 抵抗
-  - [220Ω](https://akizukidenshi.com/catalog/g/gR-25221/)
-  - [1kΩ](https://akizukidenshi.com/catalog/g/gR-25102/)
+    - [100Ω](https://akizukidenshi.com/catalog/g/gR-25101/)
+    - [220Ω](https://akizukidenshi.com/catalog/g/gR-25221/)
+    - [1kΩ](https://akizukidenshi.com/catalog/g/gR-25102/)
+    - [10kΩ](https://akizukidenshi.com/catalog/g/gR-25103/)
 - コンデンサ
-  - [セラミックコンデンサ 0.1μF](https://akizukidenshi.com/catalog/g/gP-10147/)
-  - [電解コンデンサ 100μF](https://akizukidenshi.com/catalog/g/gP-02724/)
+    - [セラミックコンデンサ 0.1μF](https://akizukidenshi.com/catalog/g/gP-10147/)
+    - [電解コンデンサ 100μF](https://akizukidenshi.com/catalog/g/gP-02724/)
 
-# Great Work!
+## Great Work!
+by UMEHARA
