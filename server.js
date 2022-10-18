@@ -16,7 +16,7 @@ serve(async (req) => {
 
     console.log(`${method} ${pathname}`);
 
-    if (pathname === "/getMoney") {
+    if (pathname === "/get-money") {
         if (method === "POST") {
             const data = await req.text();
             const json = JSON.parse(data);
@@ -26,7 +26,29 @@ serve(async (req) => {
         }
     }
 
-    if (pathname === "/signup") {
+    if (pathname === "/add-money") {
+        if (method === "POST") {
+            const data = await req.text();
+            const json = JSON.parse(data);
+            let name = json.name;
+            let value = json.value;
+
+            return addMoney(name, value);
+        }
+    }
+
+    if (pathname === "/set-money") {
+        if (method === "POST") {
+            const data = await req.text();
+            const json = JSON.parse(data);
+            let name = json.name;
+            let value = json.value;
+
+            return setMoney(name, value);
+        }
+    }
+
+    if (pathname === "/signUp") {
         if (method === "POST") {
             const data = await req.text();
             const json = JSON.parse(data);
@@ -40,7 +62,7 @@ serve(async (req) => {
         }
     }
 
-    if (pathname === "/signin") {
+    if (pathname === "/signIn") {
         if (method === "POST") {
             const data = await req.text();
             const json = JSON.parse(data);
@@ -62,8 +84,8 @@ serve(async (req) => {
 });
 
 async function getMoney(name) {
-    let msg = "404 Not Found";
-    let code = 404;
+    let msg = "300 Bad Request";
+    let code = 300;
     let MIME = "plain/text";
 
     const search = await client.query(`SELECT * FROM users WHERE name = "${name}"`);
@@ -79,6 +101,44 @@ async function getMoney(name) {
 
     return new Response(msg, {
         headers: {"Content-Type": MIME},
+        status: code
+    });
+}
+
+async function addMoney(name, value) {
+    let msg = "200 OK";
+    let code = 200;
+
+    await client.execute(`UPDATE users SET money = money + ${value} WHERE name = "${name}"`).catch(
+        function (error) {
+            const e = error.toString();
+
+            code = 300;
+            console.log(e);
+        }
+    );
+
+    return new Response(msg, {
+        headers: {"Content-Type": "plain/text"},
+        status: code
+    });
+}
+
+async function setMoney(name, value) {
+    let msg = "200 OK";
+    let code = 200;
+
+    await client.execute(`UPDATE users SET money = ${value} WHERE name = "${name}"`).catch(
+        function (error) {
+            const e = error.toString();
+
+            code = 300;
+            console.log(e);
+        }
+    );
+
+    return new Response(msg, {
+        headers: {"Content-Type": "plain/text"},
         status: code
     });
 }
