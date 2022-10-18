@@ -16,6 +16,16 @@ serve(async (req) => {
 
     console.log(`${method} ${pathname}`);
 
+    if (pathname === "/getMoney") {
+        if (method === "POST") {
+            const data = await req.text();
+            const json = JSON.parse(data);
+            let name = json.name;
+
+            return getMoney(name);
+        }
+    }
+
     if (pathname === "/signup") {
         if (method === "POST") {
             const data = await req.text();
@@ -50,6 +60,28 @@ serve(async (req) => {
 }, { port: 80 }).then(r => {
     console.log("then() => " + r);
 });
+
+async function getMoney(name) {
+    let msg = "404 Not Found";
+    let code = 404;
+    let MIME = "plain/text";
+
+    const search = await client.query(`SELECT * FROM users WHERE name = "${name}"`);
+    const json = JSON.parse(JSON.stringify(search));
+    const obj = json[0];
+
+    if (obj !== undefined) {
+        const array = {name: obj.name, money: obj.money};
+        msg = JSON.stringify(array);
+        code = 200;
+        MIME = "application/json";
+    }
+
+    return new Response(msg, {
+        headers: {"Content-Type": MIME},
+        status: code
+    });
+}
 
 async function signUp(email, name, password, created_at) {
     let msg = "200 OK";
