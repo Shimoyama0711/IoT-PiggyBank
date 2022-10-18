@@ -84,8 +84,8 @@ serve(async (req) => {
 });
 
 async function getMoney(name) {
-    let msg = "300 Bad Request";
-    let code = 300;
+    let msg = "400 Bad Request";
+    let code = 400;
     let MIME = "plain/text";
 
     const search = await client.query(`SELECT * FROM users WHERE name = "${name}"`);
@@ -113,7 +113,7 @@ async function addMoney(name, value) {
         function (error) {
             const e = error.toString();
 
-            code = 300;
+            code = 400;
             console.log(e);
         }
     );
@@ -132,7 +132,7 @@ async function setMoney(name, value) {
         function (error) {
             const e = error.toString();
 
-            code = 300;
+            code = 400;
             console.log(e);
         }
     );
@@ -150,7 +150,7 @@ async function signUp(email, name, password, created_at) {
     await client.execute(`INSERT INTO users VALUES (0, "${email}", "${name}", "${password}", 0, "${created_at}");`).catch(
         function (error) {
             const e = error.toString();
-            code = 300;
+            code = 400;
 
             if (e.includes("email_UNIQUE"))
                 msg = "そのEメールアドレスは既に登録されています";
@@ -176,11 +176,11 @@ async function signIn(email, password) {
 
     if (obj === undefined) {
         msg = "無効なメールアドレスです";
-        code = 300;
+        code = 400;
     } else {
         if (obj.password !== password) {
             msg = "パスワードが違います";
-            code = 300;
+            code = 400;
         } else
             msg = `${obj.name}`;
     }

@@ -19,7 +19,7 @@ Content-Type: `application/json`
 > ```
 
 > :x: **失敗時**
-> `300 Bad Request`
+> `400 Bad Request`
 
 ---
 
@@ -38,7 +38,7 @@ Content-Type: `application/json`
 > `200 OK`
 
 > :x: **失敗時**
-> `300 Bad Request`
+> `400 Bad Request`
 
 ---
 
@@ -57,7 +57,7 @@ Content-Type: `application/json`
 > `200 OK`
 
 > :x: **失敗時**
-> `300 Bad Request`
+> `400 Bad Request`
 
 ---
 
@@ -75,8 +75,8 @@ Content-Type: `application/json`
 > `200 OK`
 
 > :x: **失敗時**
-> `300 Bad Request - This email address is already registered.`
-> `300 Bad Request - This name is already registered.`
+> `400 Bad Request - This email address is already registered.`
+> `400 Bad Request - This name is already registered.`
 
 ---
 
@@ -97,5 +97,5 @@ Content-Type: `application/json`
 > ```
 
 > :x: **失敗時**
-> `300 Bad Request - This email address is NOT available.`
-> `300 Bad Request - Wrong password.`
+> `400 Bad Request - This email address is NOT available.`
+> `400 Bad Request - Wrong password.`
