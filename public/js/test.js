@@ -22,8 +22,8 @@ function updateDate() {
 // RGBを更新する
 function updateRGB() {
     $.ajax({
-        type: "GET",
-        url: "/rgb"
+        url: "/rgb",
+        type: "GET"
     }).done(function (data) {
         const json = JSON.parse(JSON.stringify(data));
         const red   = Number(json["red"]).toString(16).padStart(2, '0');
