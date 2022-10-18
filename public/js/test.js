@@ -26,9 +26,9 @@ function updateRGB() {
         url: "/rgb"
     }).done(function (data) {
         const json = JSON.parse(JSON.stringify(data));
-        const red   = json["red"].toString(16).padStart(2, '0');
-        const green = json["green"].toString(16).padStart(2, '0');
-        const blue  = json["blue"].toString(16).padStart(2, '0');
+        const red   = Number(json["red"]).toString(16).padStart(2, '0');
+        const green = Number(json["green"]).toString(16).padStart(2, '0');
+        const blue  = Number(json["blue"]).toString(16).padStart(2, '0');
         const colorCode = "#" + red + green + blue;
 
         $("#palette").css("background", colorCode);
