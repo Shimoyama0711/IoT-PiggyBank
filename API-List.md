@@ -67,7 +67,7 @@ Content-Type: `application/json`
 #### 送信するデータ
 Content-Type: `application/json`
 ```json
-{"email":"<String>","name":"<String>","password":"<String>","created_at":"<Date/Formatted>"}
+{"email":"<String>","name":"<String>","password":"<String>"}
 ```
 
 #### 返り値
