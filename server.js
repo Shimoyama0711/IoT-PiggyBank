@@ -11,10 +11,18 @@ const client = await new Client().connect({
 
 // 80番ポートでHTTPサーバーを構築
 serve(async (req) => {
+    // 日付の出力
+    const date = new Date();
+    const formatted = date.toLocaleString();
+
+    // reqあれこれ
     const method = req.method;
     const pathname = new URL(req.url).pathname;
+    const userAgent = req.headers.get("user-agent");
 
-    console.log(`${method} ${pathname}`);
+    // ログ出力
+    if (userAgent !== "Arduino")
+        console.log(`[${formatted}] ${method} ${pathname}`);
 
     if (pathname === "/get-money") {
         if (method === "POST") {
@@ -48,7 +56,7 @@ serve(async (req) => {
         }
     }
 
-    if (pathname === "/signUp") {
+    if (pathname === "/signup") {
         if (method === "POST") {
             const data = await req.text();
             const json = JSON.parse(data);
@@ -56,13 +64,12 @@ serve(async (req) => {
             let E = json.email.replace("@", "\@");
             let N = json.name;
             let P = json.password;
-            let C = json.created_at;
 
-            return signUp(E, N, P, C);
+            return signUp(E, N, P);
         }
     }
 
-    if (pathname === "/signIn") {
+    if (pathname === "/signin") {
         if (method === "POST") {
             const data = await req.text();
             const json = JSON.parse(data);
@@ -74,11 +81,24 @@ serve(async (req) => {
         }
     }
 
-    return serveDir(req, {
+    // ファイルを返す
+    const dir = await serveDir(req, {
         fsRoot: "./public/",
         showDirListing: true,
         enableCors: true
     });
+
+    if (dir.status === 404) {
+        const html = await Deno.readFile("./public/404.html");
+
+        return new Response(html, {
+            headers: {"Content-Type": "text/html"},
+            status: 404,
+            statusText: "404 Not Found"
+        });
+    }
+
+    return dir;
 }, { port: 80 }).then(r => {
     console.log("then() => " + r);
 });
@@ -143,11 +163,11 @@ async function setMoney(name, value) {
     });
 }
 
-async function signUp(email, name, password, created_at) {
+async function signUp(email, name, password) {
     let msg = "200 OK";
     let code = 200;
 
-    await client.execute(`INSERT INTO users VALUES (0, "${email}", "${name}", "${password}", 0, "${created_at}");`).catch(
+    await client.execute(`INSERT INTO users VALUES (0, "${email}", "${name}", "${password}", 0, now());`).catch(
         function (error) {
             const e = error.toString();
             code = 400;
