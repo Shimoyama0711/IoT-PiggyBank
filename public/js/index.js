@@ -10,9 +10,19 @@ $(function () {
             name = value;
     }
 
+    updateLastUpdate();
     reloadMoney();
 
-    $("#reload-money").on("click", reloadMoney);
+    $("#reload-money").on("click", function () {
+        updateLastUpdate();
+        reloadMoney();
+    });
+
+    function updateLastUpdate() {
+        const date = new Date().toLocaleString();
+        const text = `Last Update: ${date}`;
+        $("#last-update").text(text);
+    }
 
     function reloadMoney() {
         if (name !== undefined) {
@@ -30,6 +40,8 @@ $(function () {
             });
         } else {
             $("#money").text("¥ ---");
+            $(".amazon-btn").addClass("disabled");
+            $(".setting-btn").addClass("disabled");
         }
     }
 });
