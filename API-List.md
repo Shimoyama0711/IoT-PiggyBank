@@ -12,13 +12,13 @@ Content-Type: `application/json`
 ```
 
 #### 返り値
-> :heavy_check_mark: **成功時**
-> `200 OK`
+> :heavy_check_mark: **成功時**  
+> `200 OK`  
 > ```json
 > {"name":"<String>","money":"<Number>"}
 > ```
 
-> :x: **失敗時**
+> :x: **失敗時**  
 > `400 Bad Request`
 
 ---
@@ -34,10 +34,10 @@ Content-Type: `application/json`
 ```
 
 #### 返り値
-> :heavy_check_mark: **成功時**
+> :heavy_check_mark: **成功時**  
 > `200 OK`
 
-> :x: **失敗時**
+> :x: **失敗時**  
 > `400 Bad Request`
 
 ---
@@ -53,10 +53,10 @@ Content-Type: `application/json`
 ```
 
 #### 返り値
-> :heavy_check_mark: **成功時**
+> :heavy_check_mark: **成功時**  
 > `200 OK`
 
-> :x: **失敗時**
+> :x: **失敗時**  
 > `400 Bad Request`
 
 ---
@@ -67,15 +67,15 @@ Content-Type: `application/json`
 #### 送信するデータ
 Content-Type: `application/json`
 ```json
-{"email":"<String>","name":"<String>","password":"<String>","created_at":"<Date/Formatted>"}
+{"email":"<String>","name":"<String>","password":"<String>"}
 ```
 
 #### 返り値
-> :heavy_check_mark: **成功時**
+> :heavy_check_mark: **成功時**  
 > `200 OK`
 
-> :x: **失敗時**
-> `400 Bad Request - This email address is already registered.`
+> :x: **失敗時**  
+> `400 Bad Request - This email address is already registered.`  
 > `400 Bad Request - This name is already registered.`
 
 ---
@@ -90,12 +90,12 @@ Content-Type: `application/json`
 ```
 
 #### 返り値
-> :heavy_check_mark: **成功時**
-> `200 OK`
+> :heavy_check_mark: **成功時**  
+> `200 OK`  
 > ```text
 > <USERNAME>
 > ```
 
-> :x: **失敗時**
-> `400 Bad Request - This email address is NOT available.`
+> :x: **失敗時**  
+> `400 Bad Request - This email address is NOT available.`  
 > `400 Bad Request - Wrong password.`
