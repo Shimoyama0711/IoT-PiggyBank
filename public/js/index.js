@@ -10,20 +10,26 @@ $(function () {
             name = value;
     }
 
-    if (name !== undefined) {
-        const array = {name: name};
+    reloadMoney();
 
-        $.ajax({
-            url: "/get-money",
-            type: "POST",
-            dataType: "json",
-            data: JSON.stringify(array)
-        }).done(function (data) {
-            const json = JSON.parse(JSON.stringify(data));
-            const formatted = Number(json.money).toLocaleString();
-            $("#money").text(`¥ ${formatted}`);
-        });
-    } else {
-        $("#money").text("¥ ---");
+    $("#reload-money").on("click", reloadMoney);
+
+    function reloadMoney() {
+        if (name !== undefined) {
+            const array = {name: name};
+
+            $.ajax({
+                url: "/get-money",
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify(array)
+            }).done(function (data) {
+                const json = JSON.parse(JSON.stringify(data));
+                const formatted = Number(json.money).toLocaleString();
+                $("#money").text(`¥ ${formatted}`);
+            });
+        } else {
+            $("#money").text("¥ ---");
+        }
     }
 });
