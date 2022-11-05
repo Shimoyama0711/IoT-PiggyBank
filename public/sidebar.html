@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Sidebar Template</title>
+
+    <script src="js/sidebar.js"></script>
+</head>
+
+<body>
+
+<div id="sidebar" class="flex-column flex-shrink-0 p-3 bg-light vh-100">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+        <img src="favicon.ico" style="height: 1.5rem; width: 1.5rem" alt="IoT-PiggyBank">
+        <span class="fs-4"><b>IoT-PiggyBank</b></span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="#" class="nav-link link-dark" id="link-account">
+                <i class="bi-person-fill"></i>
+                Account
+            </a>
+        </li>
+        <li>
+            <a href="dashboard.html" class="nav-link link-dark" id="link-dashboard">
+                <i class="bi-graph-up-arrow"></i>
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link link-dark" id="link-settings">
+                <i class="bi-gear-fill"></i>
+                Settings
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link link-dark" id="link-deposit">
+                <i class="bi-terminal-fill"></i>
+                Deposit
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link link-dark" id="link-danger">
+                <i class="bi-exclamation-triangle-fill"></i>
+                Danger Zone
+            </a>
+        </li>
+    </ul>
+    <hr>
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/Shimoyama0711.png" alt="" width="32" height="32" class="rounded-circle me-2">
+            <strong id="user-name"></strong>
+        </a>
+        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
+            <li><a class="dropdown-item" href="signout.html">Sign out</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+
+</html>
