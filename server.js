@@ -12,16 +12,16 @@ const client = await new Client().connect({
 // 80番ポートでHTTPサーバーを構築
 serve(async (req) => {
     // 日付の出力
-    const date = new Date();
+    //const date = new Date();
     //const formatted = date.toLocaleString();
 
     // reqあれこれ
     const method = req.method;
     const pathname = new URL(req.url).pathname;
-    const userAgent = req.headers.get("user-agent");
+    //const userAgent = req.headers.get("user-agent");
 
     // ログ出力
-    if (userAgent !== "Arduino")
+    //if (userAgent !== "Arduino")
         //console.log(`[${formatted}] ${method} ${pathname}`);
 
     if (pathname === "/get-money") {
