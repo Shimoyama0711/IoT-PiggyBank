@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IoT-PiggyBank Dashboard</title>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/9a9d8a46b3.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="js/dashboard.js"></script>
+
+    <script type="module">
+        $(function () {
+            $("#sidebar").load("sidebar.html");
+            $("#navbar").load("navbar.html");
+        });
+    </script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+
+<nav id="navbar"></nav>
+
+<main>
+    <div class="d-flex">
+        <div class="flex-column flex-shrink-0">
+            <div id="sidebar"></div>
+        </div>
+
+        <div class="flex-column vw-100">
+            <h1 class="m-3">
+                <i class="bi-graph-up-arrow"></i>
+                Dashboard
+            </h1>
+
+            <div class="m-3 row">
+                <div class="m-3 border rounded shadow" id="chart-div">
+                    <h2>Chart</h2>
+
+                    <canvas id="chart-canvas"></canvas>
+
+                    <div class="col-6">
+                        <div class="input-group my-3">
+                            <input type="number" placeholder="Year" class="form-control" id="chart-year" aria-label="chart-year">
+                            <input type="number" min="1" max="12" placeholder="Month" class="form-control" id="chart-month" aria-label="chart-month">
+                            <input type="number" min="1" max="12" placeholder="Month" class="form-control" id="chart-day" aria-label="chart-day">
+                            <button class="btn btn-success" id="debug">
+                                <i class="bi-arrow-clockwise"></i>
+                                Reload
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+
+</html>
