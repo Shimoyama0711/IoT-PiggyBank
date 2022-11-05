@@ -1,5 +1,5 @@
-import {serve} from "https://deno.land/std@0.158.0/http/server.ts";
-import {serveDir} from "https://deno.land/std@0.158.0/http/file_server.ts";
+import {serve} from "https://deno.land/std@0.161.0/http/server.ts";
+import {serveDir} from "https://deno.land/std@0.161.0/http/file_server.ts";
 import {Client} from "https://deno.land/x/mysql@v2.10.2/mod.ts";
 
 const client = await new Client().connect({
@@ -12,23 +12,23 @@ const client = await new Client().connect({
 // 80番ポートでHTTPサーバーを構築
 serve(async (req) => {
     // 日付の出力
-    const date = new Date();
-    const formatted = date.toLocaleString();
+    //const date = new Date();
+    //const formatted = date.toLocaleString();
 
     // reqあれこれ
     const method = req.method;
     const pathname = new URL(req.url).pathname;
-    const userAgent = req.headers.get("user-agent");
+    //const userAgent = req.headers.get("user-agent");
 
     // ログ出力
-    if (userAgent !== "Arduino")
-        console.log(`[${formatted}] ${method} ${pathname}`);
+    //if (userAgent !== "Arduino")
+        //console.log(`[${formatted}] ${method} ${pathname}`);
 
     if (pathname === "/get-money") {
         if (method === "POST") {
             const data = await req.text();
             const json = JSON.parse(data);
-            let name = json.name;
+            const name = json.name;
 
             return getMoney(name);
         }
@@ -38,8 +38,8 @@ serve(async (req) => {
         if (method === "POST") {
             const data = await req.text();
             const json = JSON.parse(data);
-            let name = json.name;
-            let value = json.value;
+            const name = json.name;
+            const value = json.value;
 
             return addMoney(name, value);
         }
@@ -49,10 +49,21 @@ serve(async (req) => {
         if (method === "POST") {
             const data = await req.text();
             const json = JSON.parse(data);
-            let name = json.name;
-            let value = json.value;
+            const name = json.name;
+            const value = json.value;
 
             return setMoney(name, value);
+        }
+    }
+
+    if (pathname === "/get-history") {
+        if (method === "POST") {
+            const data = await req.text();
+            const json = JSON.parse(data);
+            const start = json.start;
+            const end = json.end;
+
+            return getHistory(start, end);
         }
     }
 
@@ -157,8 +168,37 @@ async function setMoney(name, value) {
         }
     );
 
+    await client.execute(`INSERT INTO history VALUES (0, "${name}", "${value}", NOW())`).catch(
+        function (error) {
+            const e = error.toString();
+
+            code = 400;
+            console.log(e);
+        }
+    );
+
     return new Response(msg, {
         headers: {"Content-Type": "plain/text"},
+        status: code
+    });
+}
+
+async function getHistory(start, end) {
+    let msg = "400 Bad Request";
+    let code = 400;
+    let MIME = "plain/text";
+
+    const search = await client.query(`SELECT MAX(amount) FROM history WHERE date BETWEEN "${start}" AND "${end}"`);
+    const json = JSON.parse(JSON.stringify(search));
+    const obj = json[0];
+
+    if (json[0] !== undefined) {
+        msg = obj["MAX(amount)"];
+        code = 200;
+    }
+
+    return new Response(msg, {
+        headers: {"Content-Type": MIME},
         status: code
     });
 }
@@ -167,7 +207,7 @@ async function signUp(email, name, password) {
     let msg = "200 OK";
     let code = 200;
 
-    await client.execute(`INSERT INTO users VALUES (0, "${email}", "${name}", "${password}", 0, now());`).catch(
+    await client.execute(`INSERT INTO users VALUES (0, "${email}", "${name}", "${password}", 0, NOW());`).catch(
         function (error) {
             const e = error.toString();
             code = 400;
