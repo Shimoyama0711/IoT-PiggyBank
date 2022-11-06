@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TEMPLATE</title>
+    <title>Test Page</title>
 
     <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -109,6 +109,26 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- imgur -->
+    <div class="row">
+        <div class="col-md-12 mb-3 p-4 border rounded shadow">
+            <h4>
+                <i class="bi-image"></i>
+                imgur Uploader
+            </h4>
+            <img src="default.jpg" alt="imgur" width="256px" height="256px" class="mb-3 rounded-circle" id="imgur-thumbnail">
+
+            <div class="col-6 mb-3">
+                <input type="file" accept="image/*" class="form-control" id="imgur-upload">
+            </div>
+
+            <button class="btn btn-success disabled" id="imgur-send">
+                <i class="bi-send"></i>
+                送信
+            </button>
         </div>
     </div>
 

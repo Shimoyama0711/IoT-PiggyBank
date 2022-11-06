@@ -22,19 +22,19 @@ $(function () {
     update();
 
     $("#debug").on("click", function () {
-        console.log(LABEL, LABELS, DATA);
+        if (chart)
+            chart.destroy();
+
         Y = chartYear.val();
         M = chartMonth.val();
         D = chartDay.val();
+
         getDay(Y, M, D);
         update();
     });
 
     function update() {
         context = document.getElementById("chart-canvas").getContext("2d");
-
-        if (chart)
-            chart.destroy();
 
         chart = new Chart(context, {
             type: 'line',
@@ -61,7 +61,7 @@ $(function () {
             LABELS[i] = `${i}時`;
             getHistory(`${year}-${month}-${day} ${i}:00:00`, `${year}-${month}-${day} ${i}:59:59`).done(function (data) {
                 console.log(data);
-                DATA[i] = data;
+                DATA.push(data);
             });
         }
     }

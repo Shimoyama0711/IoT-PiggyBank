@@ -1,4 +1,8 @@
 $(function () {
+    const imgurUpload = $("#imgur-upload");
+    const thumbnail = $("#imgur-thumbnail");
+    const send = $("#imgur-send");
+
     updateDate();
     updateRGB();
 
@@ -7,6 +11,22 @@ $(function () {
     $("#update-rgb").on("click", updateRGB);
     $("#getLocation").on("click", getLocation);
     $("#roll-dice").on("click", rollDice);
+
+    // サムネイル表示
+    imgurUpload.on("change", function (data) {
+        const file = data.target.files[0];
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onload = (function () {
+            const result = fileReader.result;
+            thumbnail.attr("src", result);
+        });
+
+        send.removeClass("disabled");
+    });
+
+    // 送信
+    send.on("click", uploadImage);
 });
 
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -55,4 +75,27 @@ function rollDice() {
 // 乱数
 function rand(max) {
     return Math.floor(Math.random() * max);
+}
+
+// imgur にアップロードする
+function uploadImage() {
+    const url = $("#imgur-thumbnail").attr("src");
+    const base64 = url.replace(new RegExp('data.*base64,'), '');
+    console.log(base64);
+
+    $.ajax({
+        url: "https://api.imgur.com/3/image",
+        method: "POST",
+        headers: {
+            "Authorization": "Client-ID f406669d6b38872"
+        },
+        data: {
+            image: base64
+        }
+    }).done(function (response) {
+        console.log(response);
+    }).fail(function (error) {
+        console.error("Failed to upload image.");
+        console.error(error);
+    });
 }
