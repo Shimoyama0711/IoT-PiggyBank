@@ -1,5 +1,5 @@
-import {serve} from "https://deno.land/std@0.161.0/http/server.ts";
-import {serveDir} from "https://deno.land/std@0.161.0/http/file_server.ts";
+import {serve} from "https://deno.land/std@0.158.0/http/server.ts";
+import {serveDir} from "https://deno.land/std@0.158.0/http/file_server.ts";
 import {Client} from "https://deno.land/x/mysql@v2.10.2/mod.ts";
 
 const client = await new Client().connect({
