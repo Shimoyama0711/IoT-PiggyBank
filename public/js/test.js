@@ -11,6 +11,7 @@ $(function () {
     $("#update-rgb").on("click", updateRGB);
     $("#getLocation").on("click", getLocation);
     $("#roll-dice").on("click", rollDice);
+    $("#sha-256-input").on("input", updateSHA256);
 
     // サムネイル表示
     imgurUpload.on("change", function (data) {
@@ -77,25 +78,49 @@ function rand(max) {
     return Math.floor(Math.random() * max);
 }
 
+// SHA-256出力の更新
+async function updateSHA256() {
+    const str = $("#sha-256-input").val();
+    const encryption = await sha256(str);
+    $("#sha-256-output").val(encryption);
+}
+
+async function sha256(text) {
+    const uint8 = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest("SHA-256", uint8);
+    return Array.from(new Uint8Array(digest)).map(v => v.toString(16).padStart(2, '0')).join('');
+}
+
 // imgur にアップロードする
 function uploadImage() {
-    const url = $("#imgur-thumbnail").attr("src");
-    const base64 = url.replace(new RegExp('data.*base64,'), '');
-    console.log(base64);
+    const file = document.getElementById("imgur-upload").files[0];
+    const canvas = document.createElement("canvas");
+    let base64;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        base64 = event.currentTarget.result.split(',')[1];
+    };
+    reader.readAsDataURL(file);
+
+    const formData = new FormData();
+    formData.append("image", base64);
 
     $.ajax({
         url: "https://api.imgur.com/3/image",
-        method: "POST",
+        type: "POST",
+        dataType: "json",
         headers: {
             "Authorization": "Client-ID f406669d6b38872"
         },
-        data: {
-            image: base64
-        }
+        data: formData,
+        processData: false
     }).done(function (response) {
         console.log(response);
     }).fail(function (error) {
         console.error("Failed to upload image.");
-        console.error(error);
+        console.log(error);
+        console.log(error.toString());
+        console.log(JSON.stringify(error));
     });
 }
