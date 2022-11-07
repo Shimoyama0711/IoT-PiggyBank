@@ -12,47 +12,37 @@ const client = await new Client().connect({
 // 80番ポートでHTTPサーバーを構築
 serve(async (req) => {
     // 日付の出力
-    //const date = new Date();
-    //const formatted = date.toLocaleString();
+    const date = new Date();
+    const formatted = date.toLocaleString();
 
     // reqあれこれ
     const method = req.method;
     const pathname = new URL(req.url).pathname;
-    //const userAgent = req.headers.get("user-agent");
+    const userAgent = req.headers.get("user-agent");
 
     // ログ出力
-    //if (userAgent !== "Arduino")
-        //console.log(`[${formatted}] ${method} ${pathname}`);
+    if (userAgent !== "Arduino")
+        console.log(`[${formatted}] ${method} ${pathname}`);
 
-    if (pathname === "/get-money") {
+    if (pathname === "/get-user-info") {
         if (method === "POST") {
             const data = await req.text();
             const json = JSON.parse(data);
             const name = json.name;
 
-            return getMoney(name);
+            return getUserInfo(name);
         }
     }
 
-    if (pathname === "/add-money") {
+    if (pathname === "/set-user-info") {
         if (method === "POST") {
             const data = await req.text();
             const json = JSON.parse(data);
             const name = json.name;
+            const key = json.key;
             const value = json.value;
 
-            return addMoney(name, value);
-        }
-    }
-
-    if (pathname === "/set-money") {
-        if (method === "POST") {
-            const data = await req.text();
-            const json = JSON.parse(data);
-            const name = json.name;
-            const value = json.value;
-
-            return setMoney(name, value);
+            return setUserInfo(name, key, value);
         }
     }
 
@@ -114,7 +104,37 @@ serve(async (req) => {
     console.log("then() => " + r);
 });
 
-async function getMoney(name) {
+async function setUserInfo(name, key, value) {
+    let msg = "200 OK";
+    let code = 200;
+
+    await client.execute(`UPDATE users SET ${key} = ${value} WHERE name = "${name}"`).catch(
+        function (error) {
+            const e = error.toString();
+
+            code = 400;
+            console.log(e);
+        }
+    );
+
+    if (key === "money") {
+        await client.execute(`INSERT INTO history VALUES (0, "${name}", "${value}", NOW())`).catch(
+            function (error) {
+                const e = error.toString();
+
+                code = 400;
+                console.log(e);
+            }
+        );
+    }
+
+    return new Response(msg, {
+        headers: {"Content-Type": "plain/text"},
+        status: code
+    });
+}
+
+async function getUserInfo(name) {
     let msg = "400 Bad Request";
     let code = 400;
     let MIME = "plain/text";
@@ -124,61 +144,13 @@ async function getMoney(name) {
     const obj = json[0];
 
     if (obj !== undefined) {
-        const array = {name: obj.name, money: obj.money};
-        msg = JSON.stringify(array);
+        msg = JSON.stringify(obj);
         code = 200;
         MIME = "application/json";
     }
 
     return new Response(msg, {
         headers: {"Content-Type": MIME},
-        status: code
-    });
-}
-
-async function addMoney(name, value) {
-    let msg = "200 OK";
-    let code = 200;
-
-    await client.execute(`UPDATE users SET money = money + ${value} WHERE name = "${name}"`).catch(
-        function (error) {
-            const e = error.toString();
-
-            code = 400;
-            console.log(e);
-        }
-    );
-
-    return new Response(msg, {
-        headers: {"Content-Type": "plain/text"},
-        status: code
-    });
-}
-
-async function setMoney(name, value) {
-    let msg = "200 OK";
-    let code = 200;
-
-    await client.execute(`UPDATE users SET money = ${value} WHERE name = "${name}"`).catch(
-        function (error) {
-            const e = error.toString();
-
-            code = 400;
-            console.log(e);
-        }
-    );
-
-    await client.execute(`INSERT INTO history VALUES (0, "${name}", "${value}", NOW())`).catch(
-        function (error) {
-            const e = error.toString();
-
-            code = 400;
-            console.log(e);
-        }
-    );
-
-    return new Response(msg, {
-        headers: {"Content-Type": "plain/text"},
         status: code
     });
 }
@@ -206,8 +178,11 @@ async function getHistory(start, end) {
 async function signUp(email, name, password) {
     let msg = "200 OK";
     let code = 200;
+    const encrypt = await sha256(password);
 
-    await client.execute(`INSERT INTO users VALUES (0, "${email}", "${name}", "${password}", 0, NOW());`).catch(
+    console.log(`INSERT INTO users VALUES (0, "${email}", "${name}", "${encrypt}", 0, NOW(), 0, NULL);`);
+
+    await client.execute(`INSERT INTO users VALUES (0, "${email}", "${name}", "${encrypt}", 0, NOW(), 0, NULL);`).catch(
         function (error) {
             const e = error.toString();
             code = 400;
@@ -229,6 +204,7 @@ async function signUp(email, name, password) {
 async function signIn(email, password) {
     let msg;
     let code = 200;
+    const encrypt = await sha256(password);
 
     const search = await client.query(`SELECT * FROM users WHERE email = "${email}"`);
     const json = JSON.parse(JSON.stringify(search));
@@ -238,7 +214,7 @@ async function signIn(email, password) {
         msg = "無効なメールアドレスです";
         code = 400;
     } else {
-        if (obj.password !== password) {
+        if (obj.password !== encrypt) {
             msg = "パスワードが違います";
             code = 400;
         } else
@@ -249,4 +225,10 @@ async function signIn(email, password) {
         headers: {"Content-Type": "plain/text"},
         status: code
     });
+}
+
+async function sha256(text) {
+    const uint8 = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest("SHA-256", uint8);
+    return Array.from(new Uint8Array(digest)).map(v => v.toString(16).padStart(2, '0')).join('');
 }
