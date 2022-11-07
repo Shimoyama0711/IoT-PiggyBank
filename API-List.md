@@ -1,9 +1,11 @@
 # APIリスト
+###### tags: `想像実習Ⅱ` `IoT-PiggyBank`
 
 ## 使用可能なHTTPリクエスト
 
-### `POST /get-money`
-ユーザー名からそのユーザーの所持金を取得
+### `POST /get-user-info`
+ユーザー名からそのユーザーのデータベースに保管してある情報全てを取得
+`password` は `SHA-256` にてハッシュ化している
 
 #### 送信するデータ
 Content-Type: `application/json`
@@ -23,33 +25,13 @@ Content-Type: `application/json`
 
 ---
 
-### `POST /add-money`
-ユーザー名を指定し、指定した金額を増減させる
-MySQLサーバーにきちんと反映される
+### `POST /set-user-info`
+ユーザー名を指定し、指定したカラムを設定する
 
 #### 送信するデータ
 Content-Type: `application/json`
 ```json
-{"name":"<String>","value":"<Number>"}
-```
-
-#### 返り値
-> :heavy_check_mark: **成功時**  
-> `200 OK`
-
-> :x: **失敗時**  
-> `400 Bad Request`
-
----
-
-### `POST /set-money`
-ユーザー名を指定し、指定した金額に設定する
-MySQLサーバーにきちんと反映される
-
-#### 送信するデータ
-Content-Type: `application/json`
-```json
-{"name":"<String>","value":"<Number>"}
+{"name":"<String>","key":"<String>","value":"<Number>"}
 ```
 
 #### 返り値
