@@ -29,14 +29,34 @@ $(function () {
             const array = {name: name};
 
             $.ajax({
-                url: "/get-money",
+                url: "/get-user-info",
                 type: "POST",
                 dataType: "json",
                 data: JSON.stringify(array)
             }).done(function (data) {
                 const json = JSON.parse(JSON.stringify(data));
-                const formatted = Number(json.money).toLocaleString();
-                $("#money").text(`¥ ${formatted}`);
+                const money = Number(json.money);
+                const target = Number(json.target);
+
+                $("#money").text(`¥ ${money.toLocaleString()}`);
+                $("#target").text(`¥ ${target.toLocaleString()}`);
+
+                const remainingObj = $("#remaining");
+                let sign;
+
+                if (money > target) {
+                    sign = "+";
+                    remainingObj.css("color", "#58ad45");
+                } else if (money < target) {
+                    sign = "-";
+                    remainingObj.css("color", "#bd3131");
+                } else {
+                    sign = "±";
+                    remainingObj.css("color", "#303030");
+                }
+
+                const abs = Math.abs(money - target);
+                remainingObj.text(`(${sign} ¥ ${abs.toLocaleString()})`);
             });
         } else {
             $("#money").text("¥ ---");
