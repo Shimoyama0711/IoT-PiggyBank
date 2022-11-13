@@ -16,7 +16,7 @@ $(function () {
                 <i class="bi-person-check"></i>
                 ${value} さん
             `);
-            signUp.attr("href", "#");
+            signUp.attr("href", "settings.html");
 
             signIn.html(`
                 <i class="bi-arrow-left-square-fill"></i>
