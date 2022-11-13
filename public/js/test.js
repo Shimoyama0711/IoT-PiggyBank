@@ -1,8 +1,8 @@
 $(function () {
-    const imgurUpload = $("#imgur-upload");
-    const thumbnail = $("#imgur-thumbnail");
-    const send = $("#imgur-send");
+    const imgbbUpload = $("#imgbb-upload");
+    const send = $("#imgbb-send");
 
+    drawDefault();
     updateDate();
     updateRGB();
 
@@ -14,14 +14,23 @@ $(function () {
     $("#sha-256-input").on("input", updateSHA256);
 
     // サムネイル表示
-    imgurUpload.on("change", function (data) {
+    imgbbUpload.on("change", function (data) {
         const file = data.target.files[0];
-        const fileReader = new FileReader();
-        fileReader.readAsDataURL(file);
-        fileReader.onload = (function () {
-            const result = fileReader.result;
-            thumbnail.attr("src", result);
-        });
+
+        let image = new Image();
+        let reader = new FileReader();
+
+        reader.onload = function (event) {
+            image.onload = function () {
+                const canvas = document.getElementById("imgbb-thumbnail");
+                const ctx = canvas.getContext("2d");
+                ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
+                ctx.drawImage(image, 0, 0, 256, 256);
+            }
+
+            image.src = event.target.result;
+        }
+        reader.readAsDataURL(file);
 
         send.removeClass("disabled");
     });
@@ -85,42 +94,62 @@ async function updateSHA256() {
     $("#sha-256-output").val(encryption);
 }
 
+// SHA-256の生成
 async function sha256(text) {
     const uint8 = new TextEncoder().encode(text);
     const digest = await crypto.subtle.digest("SHA-256", uint8);
     return Array.from(new Uint8Array(digest)).map(v => v.toString(16).padStart(2, '0')).join('');
 }
 
-// imgur にアップロードする
-function uploadImage() {
-    const file = document.getElementById("imgur-upload").files[0];
-    const canvas = document.createElement("canvas");
-    let base64;
+// デフォルトアイコンの描画
+function drawDefault() {
+    const canvas = document.getElementById("imgbb-thumbnail");
+    const ctx = canvas.getContext("2d");
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        base64 = event.currentTarget.result.split(',')[1];
+    const image = new Image();
+    image.src = "default.jpg";
+
+    image.onload = () => {
+        ctx.drawImage(image, 0, 0, 256, 256);
     };
-    reader.readAsDataURL(file);
+}
+
+// ImgBB にアップロードする
+function uploadImage() {
+    const thumbnail = document.getElementById("imgbb-thumbnail");
+    const base64 = thumbnail.toDataURL().split(',')[1];
+    const alert = $("#imgbb-alert");
 
     const formData = new FormData();
     formData.append("image", base64);
 
-    $.ajax({
-        url: "https://api.imgur.com/3/image",
-        type: "POST",
-        dataType: "json",
-        headers: {
-            "Authorization": "Client-ID f406669d6b38872"
-        },
-        data: formData,
-        processData: false
-    }).done(function (response) {
+    const settings = {
+        "url": "https://api.imgbb.com/1/upload?key=ecd3a94703d6f6d0ffab121d079e2682&expiration=180",
+        "method": "POST",
+        "processData": false,
+        "mimeType": "multipart/form-data",
+        "contentType": false,
+        "data": formData,
+    }
+
+    $.ajax(settings).done(function (response) {
+        const json = JSON.parse(response);
+        const url = json["data"]["url"];
+
+        alert.css("display", "block");
+        alert.removeClass("alert-danger");
+        alert.addClass("alert-success");
+        alert.html(`<i class="bi-check-circle-fill"></i> 画像のアップロードに成功しました<br>180秒後に自動削除されます<br><a href="${url}">${url}</a>`);
+
         console.log(response);
     }).fail(function (error) {
+        alert.css("display", "block");
+        alert.removeClass("alert-success");
+        alert.addClass("alert-danger");
+        alert.html(`<i class="bi-x-square-fill"></i> 画像のアップロードに失敗しました`);
+
+        console.log(settings);
         console.error("Failed to upload image.");
-        console.log(error);
-        console.log(error.toString());
         console.log(JSON.stringify(error));
     });
 }

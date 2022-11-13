@@ -53,7 +53,7 @@
                 RGB Test
             </h4>
 
-            <button class="btn btn-success" id="update-rgb">
+            <button class="mb-3 btn btn-success" id="update-rgb">
                 <i class="bi-arrow-clockwise"></i>
                 Reload
             </button>
@@ -133,23 +133,25 @@
         </div>
     </div>
 
-    <!-- imgur -->
+    <!-- ImgBB -->
     <div class="row">
         <div class="col-md-12 mb-3 p-4 border rounded shadow">
             <h4>
                 <i class="bi-image"></i>
-                imgur Uploader
+                ImgBB Uploader
             </h4>
-            <img src="default.jpg" alt="imgur" width="256px" height="256px" class="mb-3 rounded-circle" id="imgur-thumbnail">
+            <canvas width="256px" height="256px" class="mb-3 rounded-circle" id="imgbb-thumbnail"></canvas>
 
             <div class="col-6 mb-3">
-                <input type="file" accept="image/*" class="form-control" id="imgur-upload">
+                <input type="file" accept="image/*" class="form-control" id="imgbb-upload">
             </div>
 
-            <button class="btn btn-success disabled" id="imgur-send">
+            <button class="mb-3 btn btn-success disabled" id="imgbb-send">
                 <i class="bi-send"></i>
                 送信
             </button>
+
+            <div role="alert" class="alert" id="imgbb-alert" style="display: none"></div>
         </div>
     </div>
 
