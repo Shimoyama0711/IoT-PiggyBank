@@ -4,6 +4,7 @@ $(function () {
     let DATA = [];
     let context;
     let chart;
+    let target = 0;
 
     const chartYear  = $("#chart-year");
     const chartMonth = $("#chart-month");
@@ -30,14 +31,18 @@ $(function () {
         D = chartDay.val();
 
         getDay(Y, M, D);
-        update();
+
+        getUserInfo($("#user-name").text()).done(function (response) {
+            target = Number(response.target) ?? 0;
+            update();
+        });
     });
 
     function update() {
         context = document.getElementById("chart-canvas").getContext("2d");
 
         chart = new Chart(context, {
-            type: 'line',
+            type: "line",
             data: {
                 labels: LABELS,
                 datasets: [{
@@ -48,8 +53,31 @@ $(function () {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true
+                maintainAspectRatio: true,
+                plugins: {
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: "line",
+                                id: "hLine",
+                                mode: "horizontal",
+                                yMin: target,
+                                yMax: target,
+                                borderColor: "#e362be"
+                            }
+                        }
+                    }
+                }
             }
+        });
+    }
+
+    function getUserInfo(name) {
+        return $.ajax({
+            url: "/get-user-info",
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({name: name})
         });
     }
 
@@ -60,7 +88,6 @@ $(function () {
         for (let i = 0; i <= 23; i++) {
             LABELS[i] = `${i}時`;
             getHistory(`${year}-${month}-${day} ${i}:00:00`, `${year}-${month}-${day} ${i}:59:59`).done(function (data) {
-                console.log(data);
                 DATA.push(data);
             });
         }
