@@ -4,10 +4,12 @@ $(function () {
     drawAvatar(name);
 
     getUserInfo(name).done(function (response) {
+        const date = new Date(response["created_at"]);
+
         $("#account-name").text(response["name"]);
         $("#account-email").text(response["email"]);
         $("#account-password").text(response["password"]);
-        $("#account-created-at").text(response["created_at"]);
+        $("#account-created-at").text(date.toDateString() + " " + date.toTimeString());
     });
 });
 
