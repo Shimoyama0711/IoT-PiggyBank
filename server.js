@@ -1,6 +1,6 @@
-import {serve} from "https://deno.land/std@0.161.0/http/server.ts";
-import {serveDir} from "https://deno.land/std@0.161.0/http/file_server.ts";
-import {Client} from "https://deno.land/x/mysql@v2.10.3/mod.ts";
+import {serve} from "https://deno.land/std@0.164.0/http/server.ts";
+import {serveDir} from "https://deno.land/std@0.164.0/http/file_server.ts";
+import {Client} from "https://deno.land/x/mysql/mod.ts";
 
 const client = await new Client().connect({
     hostname: "localhost",
@@ -108,7 +108,7 @@ async function setUserInfo(name, key, value) {
     let msg = "200 OK";
     let code = 200;
 
-    await client.execute(`UPDATE users SET ${key} = ${value} WHERE name = "${name}"`).catch(
+    await client.execute(`UPDATE users SET ${key} = "${value}" WHERE name = "${name}"`).catch(
         function (error) {
             const e = error.toString();
 
@@ -165,7 +165,7 @@ async function getHistory(start, end) {
     const obj = json[0];
 
     if (json[0] !== undefined) {
-        msg = obj["MAX(amount)"];
+        msg = obj["MAX(amount)"] ?? 0;
         code = 200;
     }
 
